@@ -100,21 +100,21 @@ char *string_concat(char *s1, char *s2)
 char *_strdup(char *str)
 {
 	char *copy;
-	int i, len = 0;
+	int i, size = 0;
 
 	if (str == NULL)
 		return (NULL);
 
-	while (str[len] != '\0')
-		len++;
+	while (str[size] != '\0')
+		size++;
 
-	copy = (char *)malloc((sizeof(char) * len) + 1);
+	copy = (char *)malloc((sizeof(char) * size) + 1);
 	if (copy == NULL)
 		return (NULL);
 
-	for (i = 0; i < len; i++)
+	for (i = 0; i < size; i++)
 		copy[i] = str[i];
-	copy[len] = '\0';
+	copy[size] = '\0';
 
 	return (copy);
 }

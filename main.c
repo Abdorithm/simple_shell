@@ -70,28 +70,26 @@ int createChild(char *cmd, char **av)
 int exec(char *cmd, char **av, char *path)
 {
 	char **path_dirs = get_dirs(path);
-	char *path_found;
+	char *path_found = NULL;
 	int executable = check_exec(cmd), isPATH = 0;
 
-	/* printf("processing\n"); */
 	if (executable)
 	{
-		printf("\texe\n");
 		createChild(cmd, av);
 	}
-	else if (!isPATH)
+	else if (isPATH == 0)
 	{
 		path_found = check_path(cmd, path_dirs);
 		if (path_found != NULL)
 		{
-			/* printf("\tPATH\n"); */
 			createChild(path_found, av);
+			isPATH = 1;
 		}
 	}
-	else
+	if (isPATH == 0 && executable == 0)
 		printf("%s: not found\n", av[0]);
-	/* printf("ending\n"); */
-	free(path_found);
+	if (path_found != NULL)
+		free(path_found);
 	free_2d(path_dirs);
 	return (0);
 }
@@ -104,17 +102,16 @@ int exec(char *cmd, char **av, char *path)
 int main(void)
 {
 	int execShell = 1;
-	char *buffer = NULL;
-	char **av;
-	/* handling PATH */
-	char *path = _getenv("PATH");
+	char *buffer = NULL, **av, *path;
 
 	while (execShell)
 	{
+		/* handling PATH */
+		path = _getenv("PATH");
+
 		/* checks for interactive & non-interactive modes */
 		if (isatty(0))
 			printf("($) ");
-
 		buffer = readInput();
 		if (buffer == NULL)
 		{
@@ -123,6 +120,7 @@ int main(void)
 		}
 		if (buffer[0] == '\0' || strcmp(buffer, "\n") == 0)
 		{
+			free(path);
 			free(buffer);
 			continue;
 		}
@@ -137,9 +135,10 @@ int main(void)
 		if (exec(av[0], av, path) == 1)
 		{
 			free_2d(av);
+			free(path);
 			exit(EXIT_FAILURE);
 		}
-
+		free(path);
 		free_2d(av);
 	}
 	return (0);
