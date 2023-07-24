@@ -55,7 +55,7 @@ char **get_args(char *buffer)
 	char **args = NULL, *token, *tmp, *tmp_token;
 	int size = 0, i;
 
-	tmp = alloc_and_copy(buffer);
+	tmp = _strdup(buffer);
 	if (tmp == NULL)
 		return (NULL);
 	tmp_token = strtok(tmp, " ");
@@ -71,7 +71,7 @@ char **get_args(char *buffer)
 	for (i = 0; i < size - 1; i++)
 	{
 		token = strtok((i ? NULL : buffer), " ");
-		args[i] = alloc_and_copy(token);
+		args[i] = _strdup(token);
 		if (args[i] == NULL)
 		{
 			for (i--; i >= 0; i--)
@@ -82,29 +82,6 @@ char **get_args(char *buffer)
 	}
 	args[size - 1] = NULL;
 	return (args);
-}
-
-/**
- * alloc_and_copy - allocate memory and copy a string into it
- * @src: source string
- *
- * Return: a pointer to a copy of the src string,
- * NULL on failure
- */
-char *alloc_and_copy(char *src)
-{
-	int size = 0;
-	char *tmp;
-
-	while (src[size])
-		size++;
-	tmp = (char *)malloc(sizeof(char) * size + 1);
-	if (tmp == NULL)
-		return (NULL);
-	strcpy(tmp, src);
-	tmp[size] = '\0';
-
-	return (tmp);
 }
 
 /**
@@ -119,7 +96,7 @@ char **get_dirs(char *path)
 	char **dirs = NULL, *token, *tmp, *tmp_token;
 	int size = 0, i;
 
-	tmp = alloc_and_copy(path);
+	tmp = _strdup(path);
 	if (tmp == NULL)
 		return (NULL);
 	tmp_token  = strtok(tmp, ":");
@@ -135,7 +112,7 @@ char **get_dirs(char *path)
 	for (i = 0; i < size - 1; i++)
 	{
 		token = strtok((i ? NULL : path), ":");
-		dirs[i] = alloc_and_copy(token);
+		dirs[i] = _strdup(token);
 		if (dirs[i] == NULL)
 		{
 			for (i--; i >= 0; i--)

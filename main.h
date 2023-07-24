@@ -13,11 +13,11 @@
 
 char *_getenv(const char *key);
 char **get_args(char *buffer);
-char *alloc_and_copy(char *src);
 char **get_dirs(char *path);
 void free_2d(char **array);
 int check_exec(char *file);
 char *string_concat(char *s1, char *s2);
 char *check_path(char *file, char **dirs);
+char *_strdup(char *str);
 
 #endif
