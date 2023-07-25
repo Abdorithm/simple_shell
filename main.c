@@ -121,13 +121,11 @@ int exec(char *cmd, char **av, char *path, char *argv, int count)
 		_putchar(':'), _putchar(' ');
 		if (_putnum(count))
 			return (-1);
-        _putchar(':'), _putchar(' ');
+		_putchar(':'), _putchar(' ');
 		_putstr(av[0]);
-        _putchar(':'), _putchar(' ');
-		_putstr(prompt);
-		_putchar('\n');
+		_putchar(':'), _putchar(' ');
+		_putstr(prompt), _putchar('\n');
 	}
-
 	free(path_found), free_2d(path_dirs);
 	return (0);
 }
@@ -141,7 +139,7 @@ int exec(char *cmd, char **av, char *path, char *argv, int count)
  */
 int main(int argc, char **argv)
 {
-	int execShell = 1; 
+	int execShell = 1;
 	unsigned int count = 0;
 	char *buffer = NULL, **av, *path;
 

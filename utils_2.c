@@ -38,7 +38,7 @@ int _strlen(char *s)
 
 /**
  * _putnum - prints unsigned integer
- * @n: number
+ * @num: number
  *
  * Return: 0 on success, 1 on failure
  */
