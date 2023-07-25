@@ -4,7 +4,9 @@
  * check_exec - ...
  * @file: ...
  *
- * Return: 1 if true, 0 otherwise
+ * Return: 1 if file exists and is executable,
+ * 0 if file exists but not executable (no permission),
+ * -1 if file does not exist
  */
 int check_exec(char *file)
 {
@@ -22,7 +24,9 @@ int check_exec(char *file)
 	}
 	if (stat(file, &sb) == 0 && sb.st_mode & S_IXUSR && slash)
 		return (1);
-	return (0);
+	else if (stat(file, &sb) == 0 && slash)
+		return (0);
+	return (-1);
 }
 
 /**
@@ -37,28 +41,35 @@ char *check_path(char *file, char **dirs)
 {
 	struct stat sb;
 	int i = 0;
-	char *concat, *concat_path;
+	char *concat, *concat_path, *none;
 
+	none = (char *)malloc(sizeof(char) * 2);
+	if (none == NULL)
+		return (NULL);
+	none[0] = 'x', none[1] = '\0';
 	concat = string_concat("/", file);
 	if (concat == NULL)
+	{
+		free(none);
 		return (NULL);
+	}
 	for (i = 0; dirs[i]; i++)
 	{
 		concat_path = string_concat(dirs[i], concat);
 		if (concat_path == NULL)
 		{
-			free(concat);
+			free(concat), free(none);
 			return (NULL);
 		}
 		if (stat(concat_path, &sb) == 0 && sb.st_mode & S_IXUSR)
 		{
-			free(concat);
+			free(concat), free(none);
 			return (concat_path);
 		}
 		free(concat_path);
 	}
 	free(concat);
-	return (NULL);
+	return (none); /* no path was found */
 }
 
 /**
@@ -118,3 +129,29 @@ char *_strdup(char *str)
 
 	return (copy);
 }
+
+/**
+ * _strcmp - compares 2 strings
+ * @x: ...
+ * @y: ...
+ *
+ * Return: 0 or 1
+ */
+int _strcmp(char *x, char *y)
+{
+	int i, j;
+
+	for (i = 0; x[i]; i++)
+		;
+	for (j = 0; y[j]; j++)
+		;
+	if (i != j)
+		return (1);
+
+	for (i = 0; x[i]; i++)
+		if (x[i] != y[i])
+			return (1);
+	return (0);
+}
+
+

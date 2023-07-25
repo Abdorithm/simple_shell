@@ -12,7 +12,6 @@ char *_getenv(const char *key)
 	char *value = NULL;
 	int i = 0, j, k, equal, size;
 
-	(void) key;
 	while (__environ[i])
 	{
 		equal = 1;
@@ -58,11 +57,11 @@ char **get_args(char *buffer)
 	tmp = _strdup(buffer);
 	if (tmp == NULL)
 		return (NULL);
-	tmp_token = strtok(tmp, " ");
+	tmp_token = strtok(tmp, " \t");
 	while (tmp_token != NULL)
 	{
 		size++;
-		tmp_token = strtok(NULL, " ");
+		tmp_token = strtok(NULL, " \t");
 	}
 	free(tmp), size++;
 	args = (char **)malloc(sizeof(char *) * size);
@@ -70,7 +69,7 @@ char **get_args(char *buffer)
 		return (NULL);
 	for (i = 0; i < size - 1; i++)
 	{
-		token = strtok((i ? NULL : buffer), " ");
+		token = strtok((i ? NULL : buffer), " \t");
 		args[i] = _strdup(token);
 		if (args[i] == NULL)
 		{
@@ -136,4 +135,21 @@ void free_2d(char **array)
 	while (array[i])
 		free(array[i]), i++;
 	free(array);
+}
+
+/**
+ * print_env - prints the environment
+ * @env: a null terminated array of strings,
+ * with the following format var=value
+ */
+void print_env(char **env)
+{
+	unsigned int i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
 }

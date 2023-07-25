@@ -19,5 +19,7 @@ int check_exec(char *file);
 char *string_concat(char *s1, char *s2);
 char *check_path(char *file, char **dirs);
 char *_strdup(char *str);
+int _strcmp(char *x, char *y);
+void print_env(char **env);
 
 #endif
