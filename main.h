@@ -21,5 +21,9 @@ char *check_path(char *file, char **dirs);
 char *_strdup(char *str);
 int _strcmp(char *x, char *y);
 void print_env(char **env);
+void _putchar(char c);
+void _putstr(char *s);
+int _strlen(char *s);
+int _putnum(unsigned int num);
 
 #endif
