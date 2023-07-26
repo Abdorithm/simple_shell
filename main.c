@@ -77,51 +77,47 @@ int createChild(char *cmd, char **av)
  * exec - execute the command
  * @cmd: the command
  * @av: the arguments, if any
- * @path: the environ PATH key
  * @argv: ...
  * @count: ...
  *
  * Return: 0 on success, other values on failure
  */
-int exec(char *cmd, char **av, char *path, char *argv, int count)
+int exec(char *cmd, char **av, char *argv, int count)
 {
-	char **path_dirs;
-	char *path_found = NULL, *prompt;
-	int executable = check_exec(cmd), isPATH = 0, err;
+	char **path_dirs = NULL;
+	char *path_found = NULL, *prompt, *path = _getenv("PATH"); /* handling PATH */
+	int executable = check_exec(cmd), isPATH = 0, err = 0;
 
-	path_dirs = get_dirs(path);
-	if (path_dirs == NULL)
-		return (-1);
 	if (executable == 1)
 	{
 		if (createChild(cmd, av) == -1)
 			return (-1);
 	}
-	else if (isPATH == 0)
+	else if (isPATH == 0 && path != NULL)
 	{
-		/* returns the executable PATH, "x" if none, or NULL on failure */
+		path_dirs = get_dirs(path);
+		/* returns the executable PATH, NULL otherwise */
 		path_found = check_path(cmd, path_dirs);
 
-		if (path_found != NULL && _strcmp(path_found, "x"))
+		if (path_found != NULL)
 		{
 			isPATH = 1; /* there is an executable in PATH */
 			if (createChild(path_found, av) == -1)
 				return (-1);
 		}
-		else if (path_found == NULL) /* memory failure */
-			return (-1);
 	}
 	if (isPATH == 0 && executable <= 0)
 	{
 		prompt = (executable == 0 ? "permission denied" : "not found");
 		err = print_stderr(argv, count, av[0], prompt);
-		if (path_found)
-			free(path_found);
-		free_2d(path_dirs);
-		return (err);
 	}
-	free(path_found), free_2d(path_dirs);
-	return (0);
+	if (path)
+		free(path);
+	if (path_found)
+		free(path_found);
+	if (path_dirs)
+		free_2d(path_dirs);
+	return (err);
 }
 
 /**
@@ -135,41 +131,40 @@ int main(int argc, char **argv)
 {
 	int exit_stat;
 	unsigned int count = 0;
-	char *buffer = NULL, **av, *path;
+	char *buffer = NULL, **av;
 
 	(void) argc;
 	while (++count)
 	{
-		path = _getenv("PATH"); /* handling PATH */
-		if (path == NULL)
-			exit(EXIT_FAILURE);
 		if (isatty(0)) /* checks for interactive & non-interactive modes */
 			printf("($) ");
+
 		buffer = readInput();
 		if (buffer == NULL) /* EOF or input error */
-			free(path), exit(EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);
 		if (checkEmpty(buffer))
 		{
-			free(path), free(buffer);
+			free(buffer);
 			continue;
 		}
+
 		av = get_args(buffer);
 		free(buffer);
 		if (av == NULL)
 			exit(EXIT_FAILURE);
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
-			free(path), free_2d(av), exit(EXIT_SUCCESS);
+			free_2d(av), exit(EXIT_SUCCESS);
 		if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
 		else
 		{
-			exit_stat = exec(av[0], av, path, argv[0], count);
+			exit_stat = exec(av[0], av, argv[0], count);
 			if (exit_stat == -1)
-				free_2d(av), free(path), exit(EXIT_FAILURE);
+				free_2d(av), exit(EXIT_FAILURE);
 			else if (exit_stat == 127 && !isatty(0))
-				free_2d(av), free(path), exit(127);
+				free_2d(av), exit(127);
 		}
-		free(path), free_2d(av);
+		free_2d(av);
 	}
 	return (0);
 }

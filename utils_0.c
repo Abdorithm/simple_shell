@@ -30,7 +30,7 @@ char *_getenv(const char *key)
 
 			value = (char *)malloc(sizeof(char) * (size + 1));
 			if (value == NULL)
-				return (NULL);
+				exit(EXIT_FAILURE);
 			for ( ; __environ[i][j]; j++)
 				value[k] = __environ[i][j], k++;
 			value[k] = '\0';
@@ -97,7 +97,7 @@ char **get_dirs(char *path)
 
 	tmp = _strdup(path);
 	if (tmp == NULL)
-		return (NULL);
+		exit(EXIT_FAILURE);
 	tmp_token  = strtok(tmp, ":");
 	while (tmp_token != NULL)
 	{
@@ -107,7 +107,7 @@ char **get_dirs(char *path)
 	free(tmp), size++;
 	dirs = (char **)malloc(sizeof(char *) * size);
 	if (dirs == NULL)
-		return (NULL);
+		exit(EXIT_FAILURE);
 	for (i = 0; i < size - 1; i++)
 	{
 		token = strtok((i ? NULL : path), ":");
@@ -117,7 +117,7 @@ char **get_dirs(char *path)
 			for (i--; i >= 0; i--)
 				free(dirs[i]);
 			free(dirs);
-			return (NULL);
+			exit(EXIT_FAILURE);
 		}
 	}
 	dirs[size - 1] = NULL;

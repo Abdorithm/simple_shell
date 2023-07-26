@@ -35,41 +35,36 @@ int check_exec(char *file)
  * @dirs: ...
  *
  * Return: the path of the executable if found
- * NULL on failure
+ * NULL otherwise
  */
 char *check_path(char *file, char **dirs)
 {
 	struct stat sb;
 	int i = 0;
-	char *concat, *concat_path, *none;
+	char *concat, *concat_path;
 
-	none = (char *)malloc(sizeof(char) * 2);
-	if (none == NULL)
-		return (NULL);
-	none[0] = 'x', none[1] = '\0';
 	concat = string_concat("/", file);
 	if (concat == NULL)
 	{
-		free(none);
-		return (NULL);
+		exit(EXIT_FAILURE);
 	}
 	for (i = 0; dirs[i]; i++)
 	{
 		concat_path = string_concat(dirs[i], concat);
 		if (concat_path == NULL)
 		{
-			free(concat), free(none);
-			return (NULL);
+			free(concat);
+			exit(EXIT_FAILURE);
 		}
 		if (stat(concat_path, &sb) == 0 && sb.st_mode & S_IXUSR)
 		{
-			free(concat), free(none);
+			free(concat);
 			return (concat_path);
 		}
 		free(concat_path);
 	}
 	free(concat);
-	return (none); /* no path was found */
+	return (NULL); /* no path was found */
 }
 
 /**
