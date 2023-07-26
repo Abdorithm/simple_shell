@@ -6,7 +6,7 @@
  */
 void _putchar(char c)
 {
-	write(1, &c, 1);
+	write(STDERR_FILENO, &c, 1);
 }
 
 /**
@@ -18,7 +18,7 @@ void _putstr(char *s)
 	int i;
 
 	for (i = 0; s[i]; i++)
-		write(1, &s[i], 1);
+		write(STDERR_FILENO, &s[i], 1);
 }
 
 /**
@@ -82,4 +82,27 @@ int _putnum(unsigned int num)
 	}
 	free(num_str);
 	return (0);
+}
+
+/**
+ * print_stderr - ...
+ * @argv: ...
+ * @count: ...
+ * @av: ...
+ * @prompt: ...
+ *
+ * Return: 127 or -1
+ */
+int print_stderr(char *argv, unsigned int count, char *av, char *prompt)
+{
+	_putstr(argv);
+	_putchar(':'), _putchar(' ');
+	if (_putnum(count))
+		return (-1);
+	_putchar(':'), _putchar(' ');
+	_putstr(av);
+	_putchar(':'), _putchar(' ');
+	_putstr(prompt), _putchar('\n');
+
+	return (127);
 }

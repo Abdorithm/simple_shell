@@ -81,13 +81,13 @@ int createChild(char *cmd, char **av)
  * @argv: ...
  * @count: ...
  *
- * Return: 0 on success, -1 on failure
+ * Return: 0 on success, other values on failure
  */
 int exec(char *cmd, char **av, char *path, char *argv, int count)
 {
 	char **path_dirs;
 	char *path_found = NULL, *prompt;
-	int executable = check_exec(cmd), isPATH = 0;
+	int executable = check_exec(cmd), isPATH = 0, err;
 
 	path_dirs = get_dirs(path);
 	if (path_dirs == NULL)
@@ -114,14 +114,11 @@ int exec(char *cmd, char **av, char *path, char *argv, int count)
 	if (isPATH == 0 && executable <= 0)
 	{
 		prompt = (executable == 0 ? "permission denied" : "not found");
-		_putstr(argv);
-		_putchar(':'), _putchar(' ');
-		if (_putnum(count))
-			return (-1);
-		_putchar(':'), _putchar(' ');
-		_putstr(av[0]);
-		_putchar(':'), _putchar(' ');
-		_putstr(prompt), _putchar('\n');
+		err = print_stderr(argv, count, av[0], prompt);
+		if (path_found)
+			free(path_found);
+		free_2d(path_dirs);
+		return (err);
 	}
 	free(path_found), free_2d(path_dirs);
 	return (0);
@@ -136,6 +133,7 @@ int exec(char *cmd, char **av, char *path, char *argv, int count)
  */
 int main(int argc, char **argv)
 {
+	int exit_stat;
 	unsigned int count = 0;
 	char *buffer = NULL, **av, *path;
 
@@ -147,7 +145,6 @@ int main(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		if (isatty(0)) /* checks for interactive & non-interactive modes */
 			printf("($) ");
-
 		buffer = readInput();
 		if (buffer == NULL) /* EOF or input error */
 			free(path), exit(EXIT_SUCCESS);
@@ -160,13 +157,18 @@ int main(int argc, char **argv)
 		free(buffer);
 		if (av == NULL)
 			exit(EXIT_FAILURE);
-
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
-			free(path), free_2d(av), exit(errno);
+			free(path), free_2d(av), exit(EXIT_SUCCESS);
 		if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
-		else if (exec(av[0], av, path, argv[0], count) == -1)
-			free_2d(av), free(path), exit(EXIT_FAILURE);
+		else
+		{
+			exit_stat = exec(av[0], av, path, argv[0], count);
+			if (exit_stat == -1)
+				free_2d(av), free(path), exit(EXIT_FAILURE);
+			else if (exit_stat == 127 && !isatty(0))
+				free_2d(av), free(path), exit(127);
+		}
 		free(path), free_2d(av);
 	}
 	return (0);

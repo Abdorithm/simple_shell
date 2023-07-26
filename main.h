@@ -25,5 +25,6 @@ void _putchar(char c);
 void _putstr(char *s);
 int _strlen(char *s);
 int _putnum(unsigned int num);
+int print_stderr(char *argv, unsigned int count, char *av, char *prompt);
 
 #endif
