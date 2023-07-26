@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 
 		buffer = readInput();
 		if (buffer == NULL) /* EOF or input error */
-			free(path), exit(EXIT_FAILURE);
+			free(path), exit(EXIT_SUCCESS);
 		if (checkEmpty(buffer))
 		{
 			free(path), free(buffer);
