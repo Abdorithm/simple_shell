@@ -7,9 +7,9 @@
  */
 char *readInput()
 {
-	char *line = NULL;
+	char *line = NULL, *buffer;
 	size_t len = 0;
-	int nread, i;
+	int nread;
 
 	nread = getline(&line, &len, stdin);
 
@@ -22,10 +22,8 @@ char *readInput()
 	 * printf("Retrieved line of length %d:\n", nread);
 	 * fwrite(line, nread, 1, stdout);
 	 */
-	for (i = 0; line[i] != '\0'; i++)
-		;
-	line[i - 1] = '\0';
-	return (line);
+	buffer = strtok(line, "\n");
+	return (buffer);
 }
 
 /**
@@ -39,7 +37,7 @@ int checkEmpty(char *buffer)
 {
 	int i;
 
-	if (buffer[0] == '\0' || strcmp(buffer, "\n") == 0)
+	if (buffer[0] == '\0' || _strcmp(buffer, "\n") == 0)
 		return (1);
 
 	for (i = 0; buffer[i]; i++)
@@ -139,14 +137,12 @@ int exec(char *cmd, char **av, char *path, char *argv, int count)
  */
 int main(int argc, char **argv)
 {
-	int execShell = 1;
 	unsigned int count = 0;
 	char *buffer = NULL, **av, *path;
 
 	(void) argc;
-	while (execShell)
+	while (++count)
 	{
-		count++;
 		path = _getenv("PATH"); /* handling PATH */
 		if (path == NULL)
 			exit(EXIT_FAILURE);
@@ -167,7 +163,7 @@ int main(int argc, char **argv)
 			exit(EXIT_FAILURE);
 
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
-			free(path), free_2d(av), exit(EXIT_SUCCESS);
+			free(path), free_2d(av), exit(errno);
 		if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
 		else if (exec(av[0], av, path, argv[0], count) == -1)
