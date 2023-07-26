@@ -7,7 +7,7 @@
  */
 char *readInput()
 {
-	char *line = NULL, *buffer;
+	char *line = NULL;
 	size_t len = 0;
 	int nread;
 
@@ -22,8 +22,7 @@ char *readInput()
 	 * printf("Retrieved line of length %d:\n", nread);
 	 * fwrite(line, nread, 1, stdout);
 	 */
-	buffer = strtok(line, "\n");
-	return (buffer);
+	return (line);
 }
 
 /**
@@ -41,7 +40,7 @@ int checkEmpty(char *buffer)
 		return (1);
 
 	for (i = 0; buffer[i]; i++)
-		if (buffer[i] != ' ' && buffer[i] != '\t')
+		if (buffer[i] != ' ' && buffer[i] != '\t' && buffer[i] != '\n')
 			return (0);
 
 	return (1);

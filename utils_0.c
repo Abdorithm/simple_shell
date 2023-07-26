@@ -57,11 +57,11 @@ char **get_args(char *buffer)
 	tmp = _strdup(buffer);
 	if (tmp == NULL)
 		return (NULL);
-	tmp_token = strtok(tmp, " \t");
+	tmp_token = strtok(tmp, " \t\n");
 	while (tmp_token != NULL)
 	{
 		size++;
-		tmp_token = strtok(NULL, " \t");
+		tmp_token = strtok(NULL, " \t\n");
 	}
 	free(tmp), size++;
 	args = (char **)malloc(sizeof(char *) * size);
@@ -69,7 +69,7 @@ char **get_args(char *buffer)
 		return (NULL);
 	for (i = 0; i < size - 1; i++)
 	{
-		token = strtok((i ? NULL : buffer), " \t");
+		token = strtok((i ? NULL : buffer), " \t\n");
 		args[i] = _strdup(token);
 		if (args[i] == NULL)
 		{
