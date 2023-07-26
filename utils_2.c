@@ -102,7 +102,7 @@ int print_stderr(char *argv, unsigned int count, char *av, char *prompt)
 	_putchar(':'), _putchar(' ');
 	_putstr(av);
 	_putchar(':'), _putchar(' ');
-	_putstr(prompt), _putchar('\n');
+	_putstr(prompt);
 
 	return (127);
 }

@@ -26,7 +26,7 @@ void _putstr(char *s);
 int _strlen(char *s);
 int _putnum(unsigned int num);
 int print_stderr(char *argv, unsigned int count, char *av, char *prompt);
-int builtin_exit(char **av, int err);
+int builtin_exit(char **av, char *argv, int err, int count);
 int not_a_number(char *s);
 int str_to_int(char *s);
 

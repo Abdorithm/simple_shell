@@ -3,17 +3,21 @@
 /**
  * builtin_exit - ...
  * @av: the input
+ * @argv: ...
  * @err: errno
+ * @count: ...
  *
  * Return: 2 on failure of args
  */
-int builtin_exit(char **av, int err)
+int builtin_exit(char **av, char *argv, int err, int count)
 {
 	if (av[1])
 	{
 		if (not_a_number(av[1]))
 		{
 			errno = err = 2;
+			print_stderr(argv, count, av[0], "Illegal number: ");
+			_putstr(av[1]), _putchar('\n');
 			return (2);
 		}
 		err = str_to_int(av[1]);

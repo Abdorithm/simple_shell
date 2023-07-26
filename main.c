@@ -113,7 +113,7 @@ int exec(char *cmd, char **av, char *argv, int count)
 	}
 	if (isPATH == 0 && executable <= 0)
 	{
-		prompt = (executable == 0 ? "permission denied" : "not found");
+		prompt = (executable == 0 ? "permission denied\n" : "not found\n");
 		err = print_stderr(argv, count, av[0], prompt);
 	}
 	if (path)
@@ -138,7 +138,6 @@ int main(int argc, char **argv)
 	unsigned int count = 0;
 	char *buffer = NULL, **av;
 
-	errno = 0;
 	(void) argc;
 	while (++count)
 	{
@@ -158,8 +157,8 @@ int main(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
 		{
-			if (builtin_exit(av, err) == 2)
-				print_stderr(argv[0], count, av[0], "Illegal number");
+			if (builtin_exit(av, argv[0], err, count) == 2 && !isatty(0))
+				exit(2);
 		}
 		else if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
