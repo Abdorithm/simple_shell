@@ -56,6 +56,7 @@ int checkEmpty(char *buffer)
 int createChild(char *cmd, char **av)
 {
 	pid_t child_pid;
+	int status;
 
 	child_pid = fork();
 	if (child_pid == -1)
@@ -69,7 +70,11 @@ int createChild(char *cmd, char **av)
 			perror(av[0]);
 	}
 	else if (child_pid > 0)
-		wait(NULL);
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			errno = WEXITSTATUS(status);
+	}
 	return (0);
 }
 
@@ -129,10 +134,11 @@ int exec(char *cmd, char **av, char *argv, int count)
  */
 int main(int argc, char **argv)
 {
-	int exit_stat;
+	int exit_stat, err = 0;
 	unsigned int count = 0;
 	char *buffer = NULL, **av;
 
+	errno = 0;
 	(void) argc;
 	while (++count)
 	{
@@ -147,18 +153,18 @@ int main(int argc, char **argv)
 			free(buffer);
 			continue;
 		}
-
 		av = get_args(buffer);
 		free(buffer);
 		if (av == NULL)
 			exit(EXIT_FAILURE);
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
-			free_2d(av), exit(EXIT_SUCCESS);
+			free_2d(av), exit(err);
 		if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
 		else
 		{
 			exit_stat = exec(av[0], av, argv[0], count);
+			err = errno;
 			if (exit_stat == -1)
 				free_2d(av), exit(EXIT_FAILURE);
 			else if (exit_stat == 127 && !isatty(0))
