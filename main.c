@@ -144,7 +144,6 @@ int main(int argc, char **argv)
 	{
 		if (isatty(0)) /* checks for interactive & non-interactive modes */
 			printf("($) ");
-
 		buffer = readInput();
 		if (buffer == NULL) /* EOF or input error */
 			exit(EXIT_SUCCESS);
@@ -158,13 +157,15 @@ int main(int argc, char **argv)
 		if (av == NULL)
 			exit(EXIT_FAILURE);
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
-			free_2d(av), exit(err);
-		if (_strcmp(av[0], "env") == 0) /* implement env built-in */
+		{
+			if (builtin_exit(av, err) == 2)
+				print_stderr(argv[0], count, av[0], "Illegal number");
+		}
+		else if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
 		else
 		{
-			exit_stat = exec(av[0], av, argv[0], count);
-			err = errno;
+			exit_stat = exec(av[0], av, argv[0], count), err = errno;
 			if (exit_stat == -1)
 				free_2d(av), exit(EXIT_FAILURE);
 			else if (exit_stat == 127 && !isatty(0))

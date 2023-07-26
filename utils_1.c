@@ -148,5 +148,3 @@ int _strcmp(char *x, char *y)
 			return (1);
 	return (0);
 }
-
-
