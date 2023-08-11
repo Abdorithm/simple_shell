@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 	while (++count)
 	{
 		if (isatty(0)) /* checks for interactive & non-interactive modes */
-			printf("($) ");
+			printf("^-^$ ");
 		buffer = readInput();
 		if (buffer == NULL) /* EOF or input error */
 			exit(EXIT_SUCCESS);

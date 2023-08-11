@@ -18,9 +18,20 @@ Then, the repo will be downloaded on your machine. <br>
 
 After installation, fire up your terminal and navigate to the <code>simple_shell</code> directory.
 
-To run the shell, run this command:
+To run the new shell, run this command:
 <pre>
 user@os:~/simple_shell$ ./gcsh
+</pre>
+
+Now you can execute commands using our <code>gcsh</code> instead of <code>bash</code> or <em>whatever the shell</em> in your system.
+<pre>
+abdo@pop:~/simple_shell$ ./gcsh 
+^-^$ ls
+builtin_exit.c	gcsh  main.c
+^-^$ echo "hello, shell!"
+"hello, shell!"
+^-^$ exit
+abdo@pop:~/simple_shell$ 
 </pre>
 
 # Commands
