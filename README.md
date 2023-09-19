@@ -1,7 +1,7 @@
 # simple_shell
 A simple UNIX command interpreter. An immitation of the fantastic Bourne-again SHell a.k.a <code>bash</code>. I can't find a suitable name for my shell. Every Unix shell out there is an acronym of some words ending with the word "shell", like <code>bash</code> or <code>zsh</code> which stands for Z shell.
 
-For my purposes, this shell is named <code>gcsh</code>, GigaChad shell.
+This shell is named <code>hsh</code>.
 
 ALX Africa gave me the opportunity to work on this project during studying in their sorfware engineering program. 
 
@@ -20,14 +20,14 @@ After installation, fire up your terminal and navigate to the <code>simple_shell
 
 To run the new shell, run this command:
 <pre>
-user@os:~/simple_shell$ ./gcsh
+user@os:~/simple_shell$ ./hsh
 </pre>
 
-Now you can execute commands using our <code>gcsh</code> instead of <code>bash</code> or <em>whatever the shell</em> in your system.
+Now you can execute commands using our <code>hsh</code> instead of <code>bash</code> or <em>whatever the shell</em> in your system.
 <pre>
-abdo@pop:~/simple_shell$ ./gcsh 
+abdo@pop:~/simple_shell$ ./hsh 
 ^-^$ ls
-builtin_exit.c	gcsh  main.c
+builtin_exit.c	hsh  main.c
 ^-^$ echo "hello, shell!"
 "hello, shell!"
 ^-^$ exit
@@ -41,4 +41,4 @@ There are a numerous number of command a UNIX shell can intrepeter. To keep it s
 - Logical operators and command separators.
 - File as input, and comments.
 
-Otherwise, <code>gcsh</code> works as expected, for more info about the development of this shell, I will write a <code>DEV.md</code>.
+Otherwise, <code>hsh</code> works as expected, for more info about the development of this shell, I will write a <code>DEV.md</code>.

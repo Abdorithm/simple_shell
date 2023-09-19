@@ -1,11 +1,11 @@
 #include "main.h"
 
 /**
- * builtin_exit - ...
+ * builtin_exit - implements the built-in exit command
  * @av: the input
- * @argv: ...
+ * @argv: the arguments to the command
  * @err: errno
- * @count: ...
+ * @count: line counter
  *
  * Return: 2 on failure of args
  */
@@ -27,8 +27,8 @@ int builtin_exit(char **av, char *argv, int err, int count)
 }
 
 /**
- * not_a_number - ...
- * @s: ...
+ * not_a_number - checks if the argument is a number
+ * @s: the argument
  * Return: 1 or 0
  */
 int not_a_number(char *s)
@@ -42,8 +42,8 @@ int not_a_number(char *s)
 }
 
 /**
- * str_to_int - ...
- * @s: ...
+ * str_to_int - convert a string to int
+ * @s: the string
  * Return: the int
  */
 int str_to_int(char *s)
