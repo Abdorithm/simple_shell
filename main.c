@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 		if (_strcmp(av[0], "exit") == 0) /* handle exit */
 		{
 			if (builtin_exit(av, argv[0], err, count) == 2 && !isatty(0))
-				exit(2);
+				free_2d(av), exit(2);
 		}
 		else if (_strcmp(av[0], "env") == 0) /* implement env built-in */
 			print_env(__environ);
